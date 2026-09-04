@@ -5,6 +5,7 @@ public class HomingEnemyScript : MonoBehaviour
 {
     public Rigidbody2D rb2D;
     UpdateUI uiScript;
+    GameObject player;
 
     public GameObject bullet;
     public List<GameObject> bulletPool = new List<GameObject>();
@@ -31,16 +32,16 @@ public class HomingEnemyScript : MonoBehaviour
     void Start()
     {
         uiScript = GameObject.Find("Canvas").GetComponent<UpdateUI>();
+        player = GameObject.Find("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Moves the object forward one unit every frame relative to its parent.
-        if (transform.position.y >= 0)
-        {
-            transform.localPosition += new Vector3(0, -0.5f * Time.deltaTime, 0);
-        }
+        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 1f * Time.deltaTime);
+        Vector3 direction = player.transform.position - transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
 
         currentTimeS += Time.deltaTime;
         if (currentTimeS >= maxTimeS)
@@ -50,7 +51,7 @@ public class HomingEnemyScript : MonoBehaviour
             temp.transform.position = transform.position;
             //GameObject temp = Instantiate(bullet, transform.position, transform.rotation);
             Rigidbody2D rbtemp = temp.GetComponent<Rigidbody2D>();
-            rbtemp.AddForce(transform.up * -1, ForceMode2D.Impulse);
+            rbtemp.AddForce(transform.up * 5, ForceMode2D.Impulse);
             maxTimeS = Random.Range(2f, 6f);
             currentTimeS = 0;
         }

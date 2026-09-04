@@ -5,15 +5,13 @@ public class BigEnemyScript : MonoBehaviour
 {
     public Rigidbody2D rb2D;
     UpdateUI uiScript;
+    GameObject player;
 
     public GameObject bullet;
     public List<GameObject> bulletPool = new List<GameObject>();
-    
-    public float currentTimeS;
-    public float maxTimeS;
 
     [SerializeField]
-    private int HP=10;
+    private int HP=6;
 
     public GameObject RDrop1;
     public GameObject RDrop2;
@@ -24,51 +22,23 @@ public class BigEnemyScript : MonoBehaviour
 
     private void OnEnable()
     {
-        maxTimeS = Random.Range(1f, 4f);
+        
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         uiScript = GameObject.Find("Canvas").GetComponent<UpdateUI>();
+        player = GameObject.Find("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Moves the object forward one unit every frame relative to its parent.
-        if (transform.position.y >= 0)
-        {
-            transform.localPosition += new Vector3(0, -0.5f * Time.deltaTime, 0);
-        }
-
-        currentTimeS += Time.deltaTime;
-        if (currentTimeS >= maxTimeS)
-        {
-            GameObject temp = GetBullet();
-            temp.SetActive(true);
-            temp.transform.position = transform.position;
-            //GameObject temp = Instantiate(bullet, transform.position, transform.rotation);
-            Rigidbody2D rbtemp = temp.GetComponent<Rigidbody2D>();
-            rbtemp.AddForce(transform.up * -20, ForceMode2D.Impulse);
-            maxTimeS = Random.Range(1f, 4f);
-            currentTimeS = 0;
-        }
-    }
-
-    GameObject GetBullet()
-    {
-        foreach (GameObject b in bulletPool)
-        {
-            if (b.activeInHierarchy == false)
-            {
-                return b;
-            }
-        }
-        GameObject temp = Instantiate(bullet, transform.position, transform.rotation);
-        temp.SetActive(false);
-        bulletPool.Add(temp);
-        return temp;
+        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 1f * Time.deltaTime);
+        Vector3 direction = player.transform.position - transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

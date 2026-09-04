@@ -8,11 +8,7 @@ public class PowerupBase : MonoBehaviour
     //protected solo lo pueden ver el padre u sus hijos
     protected void Update()
 	{
-		transform.localPosition += new Vector3(0, -1 * Time.deltaTime, 0);
-        if (transform.position.y <= -7)
-        {
-			Destroy(this.gameObject);
-        }
+
     }
 
 	protected void OnTriggerEnter2D(Collider2D other)

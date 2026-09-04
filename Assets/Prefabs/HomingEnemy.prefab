@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HomingEnemyScript
   rb2D: {fileID: 6743415753490122630}
-  bullet: {fileID: 4705389974451136920, guid: 8503720cfea7a12449de2d1581aa504b, type: 3}
+  bullet: {fileID: 1707961165415465829, guid: 72f4ec5fb8914b548a3421963db89bf6, type: 3}
   bulletPool: []
   currentTimeS: 0
   maxTimeS: 2
