@@ -8,6 +8,7 @@ using static UnityEngine.Rendering.DebugUI;
 public class PlayerScript : MonoBehaviour
 {
     public InputAction inputmovement;
+    public InputAction rotateMovement;
 
     public float speed;
     public float gameTime;
@@ -47,13 +48,13 @@ public class PlayerScript : MonoBehaviour
     private void OnEnable()
     {
         inputmovement.Enable();
-
+        rotateMovement.Enable();
     }
 
     private void OnDisable()
     {
         inputmovement.Disable();
-
+        rotateMovement.Disable();
     }
 
     private void FixedUpdate()
@@ -61,6 +62,12 @@ public class PlayerScript : MonoBehaviour
         Vector2 movement = inputmovement.ReadValue<Vector2>();
         rb2D.linearVelocity = movement * 20;
         rb2D.linearVelocity = Vector2.ClampMagnitude(rb2D.linearVelocity, 10);
+
+        Vector2 lookDir = rotateMovement.ReadValue<Vector2>();
+        Vector2 Look = Camera.main.ScreenToWorldPoint(lookDir);
+        Vector2 Direction = Look - rb2D.position;
+        float angle = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg - 90;
+        rb2D.rotation = angle;
 
     }
 
